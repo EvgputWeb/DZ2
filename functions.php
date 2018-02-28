@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 //##############################################################################
+//##############################################################################
 // Задание #1
 
 function task1($strArr, $concat = false)
@@ -34,38 +35,52 @@ function task1($strArr, $concat = false)
 }
 
 //##############################################################################
+//##############################################################################
 // Задание #2
 
 function task2($numArr, $operation)
 {
     define(
         'ERR_MSG_WRONG_FIRST_PARAM',
-        'Первый параметр функции <b>task2</b> должен быть массивом чисел'
+        '<br>Первый параметр функции <b>task2</b> должен быть массивом чисел<br>'
     );
     define(
         'ERR_MSG_WRONG_SECOND_PARAM',
-        'Второй параметр функции <b>task2</b> должен быть строкой,<br>' .
-        'содержащей один символ: "+", "-", "*" или "/"'
+        '<br>Второй параметр функции <b>task2</b> должен быть строкой,<br>' .
+        'содержащей один символ: "+", "-", "*" или "/"<br>'
+    );
+    define(
+        'ERR_MSG_ZERO_DIVISION',
+        '<br>Ошибка: деление на ноль<br>'
     );
 
     // Проверка корректности входных параметров
     //--------------------------------------------------------------------
     // Тестируем первый входной параметр
+    // Инициализируем флаги для тестирования $numArr
+    $arrayTest1 = $arrayTest2 = $arrayTest3 = false;
 
-    // TODO: Массив должен быть не ассоциативным
+    // Тест 1: $numArr должен быть массивом (и не пустым)
+    $arrayTest1 = is_array($numArr) && (count($numArr) > 0);
 
-    if (!is_array($numArr)) {
-        echo ERR_MSG_WRONG_FIRST_PARAM;
-        return NULL; // или exception?
-    }
-    $isNum = true;
-    foreach ($numArr as $n) {
-        if (!is_numeric($n)) {
-            $isNum = false;
-            break;
+    if ($arrayTest1) { // Тест 1 прошли успешно
+        // Тест 2: массив должен быть не ассоциативным
+        $arrayTest2 = (array_keys($numArr) == range(0, count($numArr) - 1));
+
+        if ($arrayTest2) { // Тест 2 прошли успешно
+            // Тест 3: массив должен содержать только числа
+            $arrayTest3 = true;
+            foreach ($numArr as $n) {
+                if (!is_numeric($n)) {
+                    $arrayTest3 = false;
+                    break;
+                }
+            }
         }
     }
-    if (!$isNum) {
+    // Все три теста должны быть == true
+    // Если хотя бы один тест == false, то выходим из функции
+    if ((!$arrayTest1) || (!$arrayTest2) || (!$arrayTest3)) {
         echo ERR_MSG_WRONG_FIRST_PARAM;
         return NULL; // или exception?
     }
@@ -95,28 +110,38 @@ function task2($numArr, $operation)
     }
     //--------------------------------------------------------------------
     // Попали сюда - значит входные параметры корректные
+    $result = $numArr[0];
 
-    switch ($operation) {
-        case '+':
-
-            break;
-        case '-':
-
-            break;
-        case '*':
-
-            break;
-        case '/':
-
-            break;
+    for ($i = 1; $i < count($numArr); $i++) {
+        switch ($operation) {
+            case '+':
+                $result += $numArr[$i];
+                break;
+            case '-':
+                $result -= $numArr[$i];
+                break;
+            case '*':
+                $result *= $numArr[$i];
+                break;
+            case '/':
+                // Ловим деление на ноль
+                $zeroDivider = false;
+                ($numArr[$i] == 0) ? ($zeroDivider = true) : ($result /= $numArr[$i]);
+                if ($zeroDivider) {
+                    echo ERR_MSG_ZERO_DIVISION;
+                    return NULL; // или exception?
+                }
+                break;
+        }
     }
 
-
     // Выводим результат на экран
-    // echo $result;
+    echo '<br>Результат = ' . $result . '<br>';
 }
 
 //##############################################################################
+//##############################################################################
+// Задание #3
 
 
 
