@@ -38,22 +38,23 @@ function task1($strArr, $concat = false)
 //##############################################################################
 // Задание #2
 
+define(
+    'ERR_MSG_WRONG_FIRST_PARAM',
+    "<br>Первый параметр функции <b>task2</b> должен быть массивом чисел<br>\n"
+);
+define(
+    'ERR_MSG_WRONG_SECOND_PARAM',
+    "<br>Второй параметр функции <b>task2</b> должен быть строкой,<br>\n" .
+    "содержащей один символ: '+', '-', '*' или '/'<br>\n"
+);
+define(
+    'ERR_MSG_ZERO_DIVISION',
+    "<br>Ошибка: деление на ноль<br>\n"
+);
+
+
 function task2($numArr, $operation)
 {
-    define(
-        'ERR_MSG_WRONG_FIRST_PARAM',
-        "<br>Первый параметр функции <b>task2</b> должен быть массивом чисел<br>\n"
-    );
-    define(
-        'ERR_MSG_WRONG_SECOND_PARAM',
-        "<br>Второй параметр функции <b>task2</b> должен быть строкой,<br>\n" .
-        "содержащей один символ: '+', '-', '*' или '/'<br>\n"
-    );
-    define(
-        'ERR_MSG_ZERO_DIVISION',
-        "<br>Ошибка: деление на ноль<br>\n"
-    );
-
     // Проверка корректности входных параметров
     //--------------------------------------------------------------------
     // Тестируем первый входной параметр
@@ -143,6 +144,13 @@ function task2($numArr, $operation)
 //##############################################################################
 // Задание #3
 
+define(
+    'ERR_MSG_WRONG_OPERATION',
+    "'<br>Первый параметр функции <b>task3</b> должен быть строкой,<br>\n" .
+    "содержащей один символ: '+', '-', '*' или '/'<br>\n"
+);
+
+
 function task3()
 {
     $args = func_get_args();
@@ -155,12 +163,6 @@ function task3()
     //--------------------------------------------------------------------
     // Тестируем первый входной параметр
     $operation = $args[0];
-
-    define(
-        'ERR_MSG_WRONG_OPERATION',
-        "'<br>Первый параметр функции <b>task3</b> должен быть строкой,<br>\n" .
-        "содержащей один символ: '+', '-', '*' или '/'<br>\n"
-    );
 
     // Инициализируем флаги для тестирования $operation
     $operationTest1 = $operationTest2 = $operationTest3 = false;
@@ -232,6 +234,27 @@ function task3()
     }
 
     return $result;
+}
+
+//##############################################################################
+// Задание 3 с использованием вызова функции task2
+
+function task3_2()
+{
+    $args = func_get_args();
+
+    // Количество аргументов должно быть минимум 2
+    if (count($args) < 2) {
+        echo "<br>Недостаточно входных параметров<br>\n";
+        return NULL;
+    }
+
+    $operation = $args[0];
+    unset($args[0]);
+    $values = array_values($args); // переиндексируем массив с нуля
+
+    task2($values, $operation);
+
 }
 
 //##############################################################################
@@ -336,6 +359,7 @@ function test_equal_chars($str, $leftPos, $rightPos)
         return false;
     }
 }
+
 //--------------------------------------------------------------------
 
 function task5r($str)
@@ -347,7 +371,7 @@ function task5r($str)
 
     echo "<br><b>$str</b>";
 
-    $res = test_equal_chars($str, 0, strlen($str)-1);
+    $res = test_equal_chars($str, 0, strlen($str) - 1);
 
     if ($res) {
         echo " - Палиндром<br>\n";
