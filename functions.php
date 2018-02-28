@@ -143,5 +143,96 @@ function task2($numArr, $operation)
 //##############################################################################
 // Задание #3
 
+function task3()
+{
+    $args = func_get_args();
+
+    // Проверка корректности входных параметров
+    if (count($args)<2) {
+        echo '<br>Недостаточно входных параметров<br>';
+        return NULL;
+    }
+    //--------------------------------------------------------------------
+    // Тестируем первый входной параметр
+    $operation = $args[0];
+
+    define(
+        'ERR_MSG_WRONG_OPERATION',
+        '<br>Первый параметр функции <b>task3</b> должен быть строкой,<br>' .
+        'содержащей один символ: "+", "-", "*" или "/"<br>'
+    );
+
+    // Инициализируем флаги для тестирования $operation
+    $operationTest1 = $operationTest2 = $operationTest3 = false;
+
+    // Тест 1: операция должна быть строкой
+    $operationTest1 = is_string($operation);
+
+    if ($operationTest1) { // Тест 1 прошли успешно
+        // Тест 2: длина строки должна быть 1 символ
+        $operation = trim($operation); // отбрасываем пробелы
+        $operationTest2 = (strlen($operation) == 1);
+
+        if ($operationTest2) { // Тест 2 прошли успешно
+            // Тест 3: операция должна быть + - * или /
+            $operationTest3 = (strpos('+-*/', $operation) !== false);
+        }
+    }
+    // Все три теста должны быть == true
+    // Если хотя бы один тест == false, то выходим из функции
+    if ((!$operationTest1) || (!$operationTest2) || (!$operationTest3)) {
+        echo ERR_MSG_WRONG_OPERATION;
+        return NULL; // или exception?
+    }
+    //--------------------------------------------------------------------
+    // Тестируем остальные входные параметры
+    define(
+        'ERR_MSG_WRONG_VALUES',
+        '<br>Некорректные входные параметры: ожидаются числовые значения<br>'
+    );
+
+    $goodValues = true;
+    for ($i = 1; $i < count($args); $i++) {
+        if (!is_numeric($args[$i])) {
+            $goodValues = false;
+            break;
+        }
+    }
+
+    if (!$goodValues) {
+        echo ERR_MSG_WRONG_VALUES;
+        return NULL; // или exception?
+    }
+
+    //--------------------------------------------------------------------
+    // Попали сюда - значит входные параметры корректные
+    $result = $args[1];
+
+    for ($i = 2; $i < count($args); $i++) {
+        switch ($operation) {
+            case '+':
+                $result += $args[$i];
+                break;
+            case '-':
+                $result -= $args[$i];
+                break;
+            case '*':
+                $result *= $args[$i];
+                break;
+            case '/':
+                // Ловим деление на ноль
+                $zeroDivider = false;
+                ($args[$i] == 0) ? ($zeroDivider = true) : ($result /= $args[$i]);
+                if ($zeroDivider) {
+                    echo ERR_MSG_ZERO_DIVISION;
+                    return NULL; // или exception?
+                }
+                break;
+        }
+    }
+
+    return $result;
+}
+
 
 
