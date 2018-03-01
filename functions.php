@@ -168,9 +168,10 @@ function task3()
 
 //---------------------------------------------------------------------------
 // Рекурсивная функция для вывода таблиц размером от (size x size) до (1 x 1)
-function print_mult_table($size) {
+function print_mult_table($size)
+{
 
-    if ($size<1) {
+    if ($size < 1) {
         // Выход из рекурсии
         return;
 
@@ -191,6 +192,7 @@ function print_mult_table($size) {
 
     }
 }
+
 //---------------------------------------------------------------------------
 
 function task4($rowCount, $colCount)
@@ -199,7 +201,7 @@ function task4($rowCount, $colCount)
         echo "<br>Входные параметры должны быть целыми числами<br>\n";
         return NULL;
     }
-    if ($rowCount<>$colCount) {
+    if ($rowCount <> $colCount) {
         echo "<br>Входные параметры должны быть одинаковыми<br>\n";
         return NULL;
     }
