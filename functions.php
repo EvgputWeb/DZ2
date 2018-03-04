@@ -3,6 +3,10 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
+mb_internal_encoding("UTF-8");
+mb_regex_encoding("UTF-8");
+
+
 //##############################################################################
 //##############################################################################
 // Задание #1
@@ -12,7 +16,7 @@ function task1($strArr, $concat = false)
     // Проверка корректности входных параметров
     //----------------------------------------------
     if (!is_array($strArr)) {
-        return NULL; // или exception?
+        return null; // или exception?
     }
     $isString = true;
     foreach ($strArr as $s) {
@@ -22,7 +26,7 @@ function task1($strArr, $concat = false)
         }
     }
     if (!$isString) {
-        return NULL; // или exception?
+        return null; // или exception?
     }
     //----------------------------------------------
     // Попали сюда - значит входные параметры корректные
@@ -33,6 +37,7 @@ function task1($strArr, $concat = false)
         return implode(' ', $strArr);
     }
 }
+
 
 //##############################################################################
 //##############################################################################
@@ -83,7 +88,7 @@ function task2($numArr, $operation)
     // Если хотя бы один тест == false, то выходим из функции
     if ((!$arrayTest1) || (!$arrayTest2) || (!$arrayTest3)) {
         echo ERR_MSG_WRONG_FIRST_PARAM;
-        return NULL; // или exception?
+        return null; // или exception?
     }
     //--------------------------------------------------------------------
     // Тестируем второй входной параметр
@@ -107,7 +112,7 @@ function task2($numArr, $operation)
     // Если хотя бы один тест == false, то выходим из функции
     if ((!$operationTest1) || (!$operationTest2) || (!$operationTest3)) {
         echo ERR_MSG_WRONG_SECOND_PARAM;
-        return NULL; // или exception?
+        return null; // или exception?
     }
     //--------------------------------------------------------------------
     // Попали сюда - значит входные параметры корректные
@@ -127,10 +132,12 @@ function task2($numArr, $operation)
             case '/':
                 // Ловим деление на ноль
                 $zeroDivider = false;
-                ($numArr[$i] == 0) ? ($zeroDivider = true) : ($result /= $numArr[$i]);
+                ($numArr[$i] == 0) ?
+                    ($zeroDivider = true) :
+                    ($result /= $numArr[$i]);
                 if ($zeroDivider) {
                     echo ERR_MSG_ZERO_DIVISION;
-                    return NULL; // или exception?
+                    return null; // или exception?
                 }
                 break;
         }
@@ -139,6 +146,7 @@ function task2($numArr, $operation)
     // Выводим результат на экран
     echo "<br>Результат = " . $result . "<br>\n";
 }
+
 
 //##############################################################################
 //##############################################################################
@@ -151,7 +159,7 @@ function task3()
     // Количество аргументов должно быть минимум 2
     if (count($args) < 2) {
         echo "<br>Недостаточно входных параметров<br>\n";
-        return NULL;
+        return null;
     }
 
     $operation = $args[0];
@@ -159,8 +167,8 @@ function task3()
     $values = array_values($args); // переиндексируем массив с нуля
 
     task2($values, $operation);
-
 }
+
 
 //##############################################################################
 //##############################################################################
@@ -170,13 +178,10 @@ function task3()
 // Рекурсивная функция для вывода таблиц размером от (size x size) до (1 x 1)
 function print_mult_table($size)
 {
-
     if ($size < 1) {
         // Выход из рекурсии
         return;
-
     } else {
-
         echo "<table class=\"mult-table\">\n";
         for ($i = 1; $i <= $size; $i++) {
             echo "<tr>\n";
@@ -189,7 +194,6 @@ function print_mult_table($size)
         echo "<br><br>\n";
 
         print_mult_table(--$size);
-
     }
 }
 
@@ -199,23 +203,25 @@ function task4($rowCount, $colCount)
 {
     if (!is_int($rowCount) || !is_int($colCount)) {
         echo "<br>Входные параметры должны быть целыми числами<br>\n";
-        return NULL;
+        return null;
     }
     if ($rowCount <> $colCount) {
         echo "<br>Входные параметры должны быть одинаковыми<br>\n";
-        return NULL;
+        return null;
     }
 
     //--------------------------------------------------------------------
     // Попали сюда - значит входные параметры корректные
 
     echo "<style>\n";
-    echo ".mult-table { border: 2px solid black; border-collapse: collapse; text-align: center;}\n";
+    echo ".mult-table {" .
+        "   border: 2px solid black;" .
+        "   border-collapse: collapse; " .
+        "   text-align: center; }\n";
     echo ".mult-table td { border: 1px solid black; width: 26px;}\n";
     echo "</style>\n";
 
     print_mult_table($rowCount);
-
 }
 
 
@@ -249,14 +255,12 @@ function task5($str)
 {
     if (!is_string($str)) {
         echo "<br>Входной параметр должен быть строкой<br>\n";
-        return NULL;
+        return null;
     }
-
-    mb_internal_encoding("UTF-8");
 
     if (mb_strlen($str) <= 1) {
         echo "<br>В строке должно быть хотя бы 2 символа<br>\n";
-        return NULL;
+        return null;
     }
     //--------------------------------------------------------------------
     // Попали сюда - значит входной параметр корректный
@@ -269,13 +273,72 @@ function task5($str)
 
     $res = test_equal_chars($str, 0, mb_strlen($str) - 1);
 
-    if ($res) {
-        echo " - Палиндром<br>\n";
-    } else {
-        echo " - Не палиндром<br>\n";
-    }
-
+    echo ($res) ? " - Палиндром<br>\n" : " - Не палиндром<br>\n";
 }
 
+
 //##############################################################################
 //##############################################################################
+// Задание #6
+
+function task6()
+{
+    echo date('d.m.Y h:i'), "<br>\n";
+    echo strtotime('24.02.2016 00:00:00'), "<br>\n";
+}
+
+
+//##############################################################################
+//##############################################################################
+// Задание #7
+
+function task7()
+{
+    $str = "Карл у Клары украл кораллы";
+    $newStr = mb_ereg_replace('К', '', $str);
+    echo "Было:<br>\n<b>", $str, "</b><br>\n";
+    echo "Стало:<br>\n<b>", $newStr, "</b><br>\n";
+
+    echo "<br>\n";
+
+    $str = "Две бутылки лимонада";
+    $newStr = mb_ereg_replace('ДВЕ', 'Три', $str, 'i');
+    echo "Было:<br>\n<b>", $str, "</b><br>\n";
+    echo "Стало:<br>\n<b>", $newStr, "</b><br>\n";
+}
+
+
+//##############################################################################
+//##############################################################################
+// Задание #8
+
+function task8($filename)
+{
+    $lines = file(__DIR__ . DIRECTORY_SEPARATOR . $filename);
+
+    foreach ($lines as $line) {
+        echo $line . "<br>\n";
+    }
+}
+
+
+//##############################################################################
+//##############################################################################
+// Задание #9
+
+function task9($filename)
+{
+    $filename = __DIR__ . DIRECTORY_SEPARATOR . $filename;
+
+    $f = fopen($filename, "wb");
+
+    // Магический трюк для создания файла в кодировке UTF8:
+    fwrite($f, pack("CCC", 0xef, 0xbb, 0xbf));
+
+    fwrite($f, "Hello again!\n");
+    fwrite($f, "Привет снова!");
+
+    fclose($f);
+
+    echo $filename . "<br>\n";
+}
