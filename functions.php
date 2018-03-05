@@ -314,11 +314,17 @@ function task7()
 
 function task8($filename)
 {
-    $lines = file(__DIR__ . DIRECTORY_SEPARATOR . $filename);
+    $filename = __DIR__ . DIRECTORY_SEPARATOR . $filename;
 
-    foreach ($lines as $line) {
-        echo $line . "<br>\n";
-    }
+    $str = file_get_contents($filename);
+
+    echo $str . "<br>\n";
+
+    //  $lines = file(__DIR__ . DIRECTORY_SEPARATOR . $filename);
+    //
+    //  foreach ($lines as $line) {
+    //       echo $line . "<br>\n";
+    //  }
 }
 
 
@@ -330,15 +336,9 @@ function task9($filename)
 {
     $filename = __DIR__ . DIRECTORY_SEPARATOR . $filename;
 
-    $f = fopen($filename, "wb");
+    $str = "Hello again!\n" . "Привет снова!\n";
 
-    // Магический трюк для создания файла в кодировке UTF8:
-    fwrite($f, pack("CCC", 0xef, 0xbb, 0xbf));
-
-    fwrite($f, "Hello again!\n");
-    fwrite($f, "Привет снова!");
-
-    fclose($f);
+    file_put_contents($filename, $str);
 
     echo $filename . "<br>\n";
 }
