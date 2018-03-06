@@ -1,27 +1,27 @@
 <?php
 
-$filename = __DIR__ . DIRECTORY_SEPARATOR . "big_csv.csv";
+$inputCsvFilename = __DIR__ . DIRECTORY_SEPARATOR . "big_csv.csv";
 
 // Открываем csv-файл на чтение
-$fileCsv = fopen($filename, "rb");
+$inputCsvFile = fopen($inputCsvFilename, "rb");
 
 //----------------------------------
 // Файл не открыт - ошибка - выход
-if ($fileCsv === false) {
+if ($inputCsvFile === false) {
     echo "Ошибка открытия файла<br>\n";
     die;
 }
 //----------------------------------
 
 // Создаем Json-файл
-$fileJson = fopen(str_replace('.csv', '.json', $filename), "wb");
+$outputJsonFile = fopen(str_replace('.csv', '.json', $inputCsvFilename), "wb");
 
 // В первой строке csv содержит названия полей
-$s = stream_get_line($fileCsv, 4096, "\n");
-$fieldNames = explode(',', $s);
+$str = stream_get_line($inputCsvFile, 4096, "\n");
+$fieldNames = explode(',', $str);
 
 // размер входного файла в байтах (будем использовать для отображения прогресса)
-$fileSize = filesize($filename);
+$fileSize = filesize($inputCsvFilename);
 $curPos = 0; // текущая позиция в файле
 $progress = [
     '0 %' => false,
@@ -37,13 +37,13 @@ $progress = [
 ];
 echo "Обработано: <br>\n";
 //----------------------------------------------------------
-while (!feof($fileCsv)) {
+while (!feof($inputCsvFile)) {
     // Читаем строку из файла
-    $s = stream_get_line($fileCsv, 4096, "\n");
-    $curPos += strlen($s);
+    $str = stream_get_line($inputCsvFile, 4096, "\n");
+    $curPos += strlen($str);
 
     // Преобразуем в массив
-    $dataArr = explode(',', $s);
+    $dataArr = explode(',', $str);
 
     // Создаем ассоциативный массив
     $structArr = [];
@@ -55,7 +55,7 @@ while (!feof($fileCsv)) {
     $json = json_encode($structArr, JSON_UNESCAPED_UNICODE);
 
     // Пишем json-строку в файл
-    fwrite($fileJson, $json . "\n");
+    fwrite($outputJsonFile, $json . "\n");
 
     // Отображаем процент выполнения
     $percent = (int)(($curPos * 100) / $fileSize);
@@ -71,5 +71,5 @@ while (!feof($fileCsv)) {
 echo "100 % <br>\n";
 echo "Обработка завершена<br>\n";
 
-fclose($fileCsv);
-fclose($fileJson);
+fclose($inputCsvFile);
+fclose($outputJsonFile);
